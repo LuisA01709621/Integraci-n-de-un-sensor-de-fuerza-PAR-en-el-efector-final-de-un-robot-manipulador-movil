@@ -20,3 +20,4 @@ void loop() {
   //Serial.println(" kg");
   delay(100); // Espera un segundo antes de leer nuevamente
 }
+
