@@ -1,1 +1,1 @@
-# Integraci-n-de-un-sensor-de-fuerza-PAR-en-el-efector-final-de-un-robot-manipulador-movil
+# Integracion_de_un_sensor_de_fuerza_PAR_en_el_efector_final_de_un_robot_manipulador_movil
