@@ -8,6 +8,7 @@ const int analogInputPin = A0;  // Pin de entrada analógica
 const float R1 = 40.0;          // Valor de la resistencia en ohmios
 const float C1 = 0.001;         // Valor del condensador en faradios
 const float sampleRate = 1000;  // Tasa de muestreo en Hz
+const float x=2000; //Valor maximo
 
 void setup() {
   Serial.begin(9600);
@@ -21,8 +22,9 @@ void loop() {
   // Calcular el voltaje
   float voltage = sensorValue * (5.0 / 1023.0);
 
-  // Aplicar el filtro pasaaltos
-  float filteredVoltage = lowPassFilter(voltage);
+  // Aplicar el filtro pasa altos
+  float filteredVoltage = lowPassFilter2(voltage);
+
 
   // Imprimir resultados
 //  Serial.print("Raw Voltage: ");
@@ -45,4 +47,13 @@ float lowPassFilter(float inputVoltage) {
   prevFilteredVoltage = filteredVoltage;
 
   return filteredVoltage;
+}
+
+float lowPassFilter2(float inputVoltage) {
+  if (inputVoltage<x){
+    return inputVoltage;
+  } else {
+    inputVoltage = x;
+    return inputVoltage;
+  }
 }
