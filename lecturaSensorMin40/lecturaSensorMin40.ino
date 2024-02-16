@@ -1,6 +1,5 @@
 #include <iostream>
 #include <SerialStream.h>
-
 int main(){
     using namespace LibSerial;
 
