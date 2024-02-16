@@ -1,5 +1,4 @@
 #include <HX711.h>
-
 #define DOUT_PIN  A1  // Pin de datos del módulo HX711
 #define CLK_PIN   A0  // Pin de reloj del módulo HX711
 HX711 scale;
