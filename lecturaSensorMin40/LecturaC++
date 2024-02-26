@@ -1,0 +1,72 @@
+#include <iostream>
+#include <windows.h>
+
+int main() {
+    HANDLE hSerial;
+    DCB dcbSerialParams = {0};
+    COMMTIMEOUTS timeouts = {0};
+
+    // Abrir el puerto serie
+    hSerial = CreateFile("COM5", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hSerial == INVALID_HANDLE_VALUE) {
+        std::cerr << "Error al abrir el puerto serie" << std::endl;
+        return 1;
+    }
+
+    // Configurar los parámetros del puerto serie
+    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+    if (!GetCommState(hSerial, &dcbSerialParams)) {
+        std::cerr << "Error al obtener los parámetros del puerto serie" << std::endl;
+        CloseHandle(hSerial);
+        return 1;
+    }
+
+    dcbSerialParams.BaudRate = CBR_9600;   // Velocidad de transmisión
+    dcbSerialParams.ByteSize = 8;          // Tamaño del byte
+    dcbSerialParams.StopBits = ONESTOPBIT; // Bits de parada
+    dcbSerialParams.Parity = NOPARITY;     // Paridad
+
+    if (!SetCommState(hSerial, &dcbSerialParams)) {
+        std::cerr << "Error al configurar los parámetros del puerto serie" << std::endl;
+        CloseHandle(hSerial);
+        return 1;
+    }
+
+    // Configurar los timeouts del puerto serie
+    timeouts.ReadIntervalTimeout = 50;
+    timeouts.ReadTotalTimeoutConstant = 50;
+    timeouts.ReadTotalTimeoutMultiplier = 10;
+    timeouts.WriteTotalTimeoutConstant = 50;
+    timeouts.WriteTotalTimeoutMultiplier = 10;
+
+    if (!SetCommTimeouts(hSerial, &timeouts)) {
+        std::cerr << "Error al configurar los timeouts del puerto serie" << std::endl;
+        CloseHandle(hSerial);
+        return 1;
+    }
+
+    // Lectura de datos del puerto serie
+    char buffer[1024];
+    DWORD bytesRead;
+    while (true) {
+        if (!ReadFile(hSerial, buffer, sizeof(buffer), &bytesRead, NULL)) {
+            std::cerr << "Error al leer del puerto serie" << std::endl;
+            CloseHandle(hSerial);
+            return 1;
+        }
+
+        if (bytesRead > 0) {
+            // Procesar los datos leídos aquí
+            std::cout << "Datos recibidos: ";
+            for (DWORD i = 0; i < bytesRead; ++i) {
+                std::cout << buffer[i];
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    // Cerrar el puerto serie
+    CloseHandle(hSerial);
+
+    return 0;
+} 
