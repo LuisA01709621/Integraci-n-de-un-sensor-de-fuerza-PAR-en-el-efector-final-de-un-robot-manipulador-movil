@@ -1,0 +1,28 @@
+import subprocess
+import serial
+import time
+
+# Configura la conexión serial (reemplaza 'COM5' con tu puerto real)
+ser = serial.Serial('COM5', baudrate=115200)
+
+try:
+    while True:
+        # Ejecuta un comando usando subprocess (reemplaza 'tu_comando' con el comando real)
+        output = subprocess.check_output(['A', 'S'])
+        
+        # Imprime la salida del comando en la consola
+        print("Salida del comando:", output)
+
+        # Escribe la salida del comando en el puerto serial
+        ser.write(output.encode('utf-8'))
+
+        # Espera un tiempo antes de repetir el ciclo
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    # Manejo de interrupción de teclado (Ctrl+C)
+    print("Programa interrumpido por el usuario.")
+
+finally:
+    # Cierra la conexión serial al finalizar
+    ser.close()
