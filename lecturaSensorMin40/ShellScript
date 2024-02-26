@@ -1,0 +1,22 @@
+#!/bin/bash
+
+COM_PORT=COM5
+BAUD_RATE=115200
+COMMAND="A S"
+
+echo "Conectando a $COM_PORT a $BAUD_RATE bps"
+putty -serial $COM_PORT -sercfg $BAUD_RATE,8,n,1,N -m comandos.txt &
+
+echo "Esperando a que PuTTY termine..."
+sleep 5
+
+while true; do
+    echo "Enviando comando: $COMMAND"
+    echo "$COMMAND" > comandos.txt
+
+    # Esperar 1 segundo
+    sleep 1
+
+    # Mostrar la salida del comando en tiempo real
+    tail -n 1 comandos.txt
+done
